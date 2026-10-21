@@ -99,3 +99,29 @@ describe('Interferences & noise', () => {
     expect(slitOverlap(0, 0.1e-3, 0.8e-3)).toBeGreaterThan(0.999);
   });
 });
+
+import { analyseZones, fitZoomSteer, UPB } from '../src/physics/zones.js';
+
+describe('U–Pb split zones', () => {
+  const { d, L } = sapphireDesign();
+  const nat = (m) => lateralAtFocus(L, traceIon(d, L, { mu: m / 220, ds: 0.002 }));
+  const r = analyseZones(nat, { pitch: 2.5e-3, mRef: 220, wb: 0.25e-3, wc: 1e-3 });
+  it('least-squares zoom/steer fit recovers an exact linear map', () => {
+    const f = fitZoomSteer([0, 1, 2, 3], [0.5, 2.5, 4.5, 6.5]);
+    expect(f.z).toBeCloseTo(2, 12);
+    expect(f.s).toBeCloseTo(0.5, 12);
+  });
+  it('1 u spacing at Pb is ~15–20 % wider than at U (D/m scaling)', () => {
+    const pb = Math.abs(nat(207) - nat(206)), u = Math.abs(nat(238) - nat(237));
+    expect(pb / u).toBeGreaterThan(1.12);
+    expect(pb / u).toBeLessThan(1.22);
+  });
+  it('a single zoom cannot centre Pb and U together; independent zones can', () => {
+    expect(r.worstLinked).toBeGreaterThan(0.4e-3); // beams far outside the 0.375 mm flat-top half-width
+    expect(r.minFLinked).toBeLessThan(0.5);
+    expect(r.worstSplit).toBeLessThan(0.08e-3);
+    expect(r.minFSplit).toBeGreaterThan(0.999);
+    expect(r.fitH.z / r.fitL.z).toBeGreaterThan(1.1);
+    expect(UPB.low.length + UPB.high.length).toBe(8);
+  });
+});

@@ -21,10 +21,22 @@ export default {
     const root = new THREE.Group();
     root.add(inst.root);
     const { d, D } = sapphireDesign();
+    {
+      const t = new THREE.Object3D();
+      t.position.set(0, 0.24, 0);
+      inst.features.collector.add(t);
+      ctx.label(t, 'U–Pb: split low/high-mass zones ⇔', { sub: 'click → dedicated scene', className: 'callout', onClick: () => { location.hash = 'scene=upb'; } });
+    }
 
     const intro = section('Nu Sapphire (model)', { icon: '⌬' });
     intro.body.append(para('A multicollector ICP-MS whose ion beam can either take the conventional <b>high-energy path</b> (6 keV, straight to the analyser) or be deflected into a <b>low-energy path</b> through a hexapole <b>collision/reaction cell</b> that strips plasma-based molecular interferences (ArH⁺, Ar⁺, Ar₂⁺, ArO⁺) before the ions are re-accelerated. A Nier–Johnson ESA + magnet then focuses in both angle and energy, zoom optics set the dispersion, and 16 fixed Faradays collect the isotopes simultaneously.'));
 
+    const upbCard = section('Highlight: split low/high-mass zones for U–Pb', { icon: '⇔' });
+    upbCard.body.append(
+      para('The Sapphire collector end can be run with <b>independently controlled low-mass (Hg–Pb) and high-mass (Th–U) zones</b> — separate dispersion and steering for each — so ²⁰²Hg–²⁰⁸Pb and ²³²Th–²³⁸U are centred on their detectors at the same time: static, simultaneous Pb + U collection for laser-ablation U–Pb without peak hopping.'),
+      note('Provenance: user/lab knowledge — confirm with Nu documentation.', 'warn'),
+      h('div', { class: 'btn-row' }, h('a', { class: 'btn primary', href: '#scene=upb', style: 'text-decoration:none' }, 'Open the U–Pb zones scene →')),
+    );
     const ctl = section('Beam path & element', { icon: '⚙' });
     const pathSeg = segmented({ options: [{ value: 'cell', label: 'Low-energy · collision cell' }, { value: 'he', label: 'High-energy · bypass' }], value: path0, onChange: (v) => { inst.setPath(v); refresh(); app.applyBeams(); } });
     const elSeg = segmented({ options: Object.keys(SYSTEMS).map((k) => ({ value: k, label: k })), value: element, onChange: (v) => { element = v; inst.setElement(v); zoomS.set(inst.readout().plan.z); refresh(); app.applyBeams(); } });
@@ -47,7 +59,7 @@ export default {
 
     const specCard = section('Specifications & provenance', { icon: '☰', open: false });
     specCard.body.append(
-      table(['Item', 'Value', ''], SAPPHIRE.specs.map(([k, v, ok, src]) => [k, v, ok ? `<a class="tag v" href="${SOURCES[src].url}" target="_blank" rel="noopener">source</a>` : '<span class="tag a">assumed</span>'])),
+      table(['Item', 'Value', ''], SAPPHIRE.specs.map(([k, v, ok, src]) => [k, v, ok ? `<a class="tag v" href="${SOURCES[src].url}" target="_blank" rel="noopener">source</a>` : src === 'user' ? '<span class="tag a">user/lab — confirm</span>' : '<span class="tag a">assumed</span>'])),
       sources(Object.values(SOURCES)),
     );
 
@@ -73,7 +85,7 @@ export default {
     const c = box.getCenter(new THREE.Vector3());
     return {
       root, exploder: { set: (t) => inst.exploder.set(t) },
-      panel: [intro.el, ctl.el, tour.el, specCard.el],
+      panel: [intro.el, upbCard.el, ctl.el, tour.el, specCard.el],
       camera: { position: [c.x - 0.15, c.y + 2.75, c.z + 2.35], target: [c.x - 0.05, c.y + 0.2, c.z - 0.05] },
       scale: 2.6, defaults: { xray: true },
       update(dt) { inst.update(dt); },

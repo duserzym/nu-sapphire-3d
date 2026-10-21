@@ -11,6 +11,7 @@ export const SOURCES = {
   specEurope: { label: 'Spectroscopy Europe: Nu Sapphire', url: 'https://spectroscopyeurope.com/node/3135' },
   harvard: { label: 'Goldschmidt 2023 abstract 20550 (Harvard Sapphire)', url: 'https://goldschmidtabstracts.info/2023/20550.pdf' },
   belshaw: { label: 'Belshaw et al. (1998) Nu Plasma design', url: 'https://www.geomar.de/fileadmin/personal/fb1/p-oz/mfrank/Belshaw_et_al_1998.pdf' },
+  gchron2020: { label: 'Geochronology 2:343 (2020): Nu Plasma 3D LA U–Pb detector layout', url: 'https://gchron.copernicus.org/articles/2/343/2020/' },
   jaas2025: { label: 'JAAS 2025, d5ja00189g (K isotopes; Sapphire comparison)', url: 'https://pubs.rsc.org/en/content/articlehtml/2025/ja/d5ja00189g' },
 };
 
@@ -36,5 +37,7 @@ export const SAPPHIRE = {
     ['Sector angles & drifts', 'ESA 90°, magnet 70°, L′ = 35 cm; L₂, L₃ solved for an achromatic focus (model)', false, null],
     ['Cup spacing', '2.5 mm fixed spacing on the focal plane (Nu Plasma, Belshaw et al. 1998; assumed unchanged)', true, 'belshaw'],
     ['Zoom factor', 'Chosen so isotopes land on every 1st or 2nd cup (model)', false, null],
+    ['Split low/high-mass zones (U–Pb)', 'Independent zoom/steering for a low-mass (Hg–Pb) and a high-mass (Th–U) collector zone → static simultaneous Pb + U collection. User/lab knowledge — confirm with Nu documentation', false, 'user'],
+    ['U–Pb detector layout (Nu Plasma 3D)', '6 Dalys (5 low-mass side: ²⁰², ²⁰⁴, ²⁰⁶, ²⁰⁷, ²⁰⁸; 1 high-mass side), 14 Faradays between; ²³²Th, ²³⁸U on Faradays', true, 'gchron2020'],
   ],
 };
