@@ -3,7 +3,7 @@
 Interactive, explodable three.js models of a **dual-path collision/reaction-cell MC-ICP-MS** of the Nu Sapphire type.
 The physics underneath the visuals is computed, not drawn by hand: the ion optics are a solved and traced double-focusing design, and the cell, plasma and mass-bias behaviour come from small physics modules. The app shell, controls and styling are shared with the companion **TIMS 3D** project.
 
-> **Status:** private repository for review. The GitHub Pages workflow is manual-only (`workflow_dispatch`), because a Pages site is always public.
+> **Live site:** <https://duserzym.github.io/nu-sapphire-3d/>
 
 | Scene | What it shows |
 |---|---|
